@@ -26,6 +26,7 @@ def my_formatter_fun(x, p):
 	# usage:
 	# ax.get_yaxis().set_major_formatter(ticker.FuncFormatter(plot_tools.my_formatter_fun))
     import numpy as np
+	
     return r"$10^{%d}$" % np.log10(x)  #  raw string to avoid "\\"
 
 
@@ -43,6 +44,7 @@ def neg_exp(ax,axis='x'):
 			l.set_text(l.get_text().replace('\\mathdefault',''))
 	
 	except:
+		pass
 	
 	# https://stackoverflow.com/questions/63723514/userwarning-fixedformatter-should-only-be-used-together-with-fixedlocator
 
@@ -64,20 +66,33 @@ def join_legends(ax1,ax2):
 	return handles, labels
 	
 	
-	
+def void_object():
+	return 
 
 
-def load_custom_font(font='hershey',fonts_dir='/home/nunop/fonts/'):
+def load_custom_font(font='hershey'):
 	import matplotlib.font_manager as font_manager
 	import matplotlib as mpl
 	import os
-	font_dir = os.path.join(fonts_dir,dic_fonts[font]['dirf'])
+	import inspect
 	
+	# the fonts directory should be one level up in the _fonts directory
+	fonts_dir = os.path.dirname(os.path.realpath(__file__))
+	fonts_dir=os.path.abspath(fonts_dir).split('/')[:-1]
+	fonts_dir.append('_fonts')
+	fonts_dir = ('/').join(fonts_dir)
+	
+		
 	dic_fonts = {'hershey':{'dirf':'AVHershey','name':'AVHershey Simplex'},\
 			 'msyi':{'dirf':'msyi','name':'Microsoft Yi Baiti'},\
 			 'dina':{'dirf':'dina','name':'Dina ttf 10px'},\
 			 'terminus':{'dirf':'Terminus (TTF)','name':'terminus-ttf-4.49.2'}
 			 }
+			 
+	font_dir = os.path.join(fonts_dir,dic_fonts[font]['dirf'])
+	
+	
+			 
 
 	for found_font in font_manager.findSystemFonts(fontpaths=font_dir, fontext='ttf'):
 		#print (font)
