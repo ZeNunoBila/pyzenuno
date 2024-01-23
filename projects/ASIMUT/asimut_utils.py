@@ -45,7 +45,7 @@ def check_inp_file(index,
 	configuration.read(inp_file)
 	
 	
-	if  all_fields == True: # != True:
+	if	all_fields == True: # != True:
 		fields = configuration
 	else:
 		fields = all_fields
@@ -59,9 +59,9 @@ def check_inp_file(index,
 			try:
 				print ('  %s' % secs)
 				for ssecs in configuration[secs]:
-					print ('    %s = %s' % (ssecs,configuration[secs][ssecs]))
+					print ('	%s = %s' % (ssecs,configuration[secs][ssecs]))
 			except:
-				print ('    Field %s doesnt exist in inp file' % secs)
+				print ('	Field %s doesnt exist in inp file' % secs)
 #	with open(inp_file) as f:	   
 #		data = yaml.load(f, Loader=yaml.FullLoader)
 #	print (data)
@@ -79,7 +79,8 @@ def load_asi_files(indexes=[0],
 				   kind='nc',
 				   layer=1,
 				   convert2lambda=True,
-				   spec_redux=1):
+				   spec_redux=1,
+				   newRootDir=False):
 	
 	import pandas as pd
 	import os
@@ -120,7 +121,11 @@ def load_asi_files(indexes=[0],
 	dic_out = {}
 	for ix in indexes:
 		fn = dic_fmt[kind] % (file_prefix,spfen,layer)
-		rf = os.path.join(log.iloc[ix]['outdir'],fn)
+		if type(newRootDir) == str:
+			outdir = os.path.join(newRootDir,log.iloc[ix]['tree'])
+		else:
+			outdir = log.iloc[ix]['outdir']
+		rf = os.path.join(outdir,fn)
 		# check data header: line that starts with %#
 		fp = open(rf)
 		hf,uf = False,False
@@ -174,4 +179,3 @@ def load_asi_files(indexes=[0],
 	return dic_out
 
 		
-
